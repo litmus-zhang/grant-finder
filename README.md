@@ -1,9 +1,4 @@
-# Getting started with Crawlee
+# Getting started with Grant Finder
 
-This example uses `PlaywrightCrawler` to recursively crawl https://crawlee.dev using the browser automation library [Playwright](https://playwright.dev).
-
-You can find more examples and documentation at the following links:
-
-- [Step-by-step tutorial](https://crawlee.dev/docs/introduction) for Crawlee
-- `PlaywrightCrawler` [API documentation](https://crawlee.dev/api/playwright-crawler/class/PlaywrightCrawler)
-- Other [examples](https://crawlee.dev/docs/examples/playwright-crawler)
+This application crawls the web for grants related to Solana blockchain, and then save the result. this result is then used by a client show a listng of grants.
+- Built with Crawlee => Check out the [Step-by-step tutorial](https://crawlee.dev/docs/introduction) for Crawlee

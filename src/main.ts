@@ -32,7 +32,7 @@ const crawler = new PlaywrightCrawler({
             log.info(`result: ${result}`);
             await Dataset.pushData(result);
 
-            await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
+           // await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
         } else {
             await page.waitForSelector('.notion-collection-card')
             await page.click
