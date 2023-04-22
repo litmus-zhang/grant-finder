@@ -10,18 +10,19 @@ const crawler = new PlaywrightCrawler({
         // click on the ecosystem label
 
 
-        if (request.loadedUrl === 'https://blockworks.co/grants/programs') {
-            await page.waitForSelector('label > .flex.flex-col');
-            await page.click('text=Select ecosystem to filter')
-            await page.click('text=Solana')
+     //   if (request.loadedUrl === 'https://blockworks.co/grants/programs') {
+           // await page.waitForSelector('label > .flex.flex-col');
+        //    await page.click('text=Select ecosystem to filter')
+          //  await page.click('text=Solana')
 
-            await enqueueLinks({
-                selector: 'tbody > tr > td > a.text-gray-900',
-                label: 'Card Detail',
-                strategy: 'all'
-            })
+          //  await enqueueLinks({
+         //       selector: 'tbody > tr > td > a.text-gray-900',
+         //       label: 'Card Detail',
+        //        strategy: 'all'
+       //     })
 
-        } else if (request.label === 'Card Detail') {
+       // } else 
+if (request.label === 'Card Detail') {
             const link = request.url;
             const title = await page.title();
 
@@ -32,7 +33,7 @@ const crawler = new PlaywrightCrawler({
             log.info(`result: ${result}`);
             await Dataset.pushData(result);
 
-           // await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
+           await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
         } else {
             await page.waitForSelector('.notion-collection-card')
             await page.click
@@ -74,5 +75,5 @@ const crawler = new PlaywrightCrawler({
 });
 
 // Add first URL to the queue and start the crawl.
-await crawler.run(['https://superteam.fun/instagrants', 'https://blockworks.co/grants/programs']);
-//await crawler.run(['https://superteam.fun/instagrants']);
+//await crawler.run(['https://superteam.fun/instagrants', 'https://blockworks.co/grants/programs']);
+await crawler.run(['https://superteam.fun/instagrants']);
