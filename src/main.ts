@@ -1,8 +1,9 @@
 // For more information, see https://crawlee.dev/
 import { PlaywrightCrawler, Dataset } from 'crawlee';
+import { Actor } from 'apify';
 
-// PlaywrightCrawler crawls the web using a headless
-// browser controlled by the Playwright library.
+await Actor.init();
+
 const crawler = new PlaywrightCrawler({
     // Use the requestHandler to process each of the crawled pages.
     async requestHandler({ request, page, enqueueLinks, log }) {
@@ -13,7 +14,7 @@ const crawler = new PlaywrightCrawler({
         if (request.loadedUrl === 'https://blockworks.co/grants/programs') {
             await page.waitForSelector('button:has-text("Select ecosystem to filter")');
             await page.click('button:has-text("Select ecosystem to filter")')
-            await page.click('text=Solana')
+            await page.locator('li:has-text("Solana")').click();
 
 
             await enqueueLinks({
@@ -27,7 +28,7 @@ const crawler = new PlaywrightCrawler({
             let link, title;
 
             if (request.url.includes('notion.site')) {
-                await page.waitForLoadState('networkidle');
+                await page.waitForLoadState('networkidle', { timeout: 120000 });
 
                 link = request.url;
                 title = await page.title();
@@ -45,10 +46,9 @@ const crawler = new PlaywrightCrawler({
             log.info(`result: ${result}`);
             await Dataset.pushData(result);
 
-            // await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
+            await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
         } else {
             await page.waitForSelector('.notion-collection-card')
-            await page.click
             // Add all links found on the page to the queue.
             await enqueueLinks({
                 selector: '.notion-collection-card > a',
@@ -72,7 +72,7 @@ const crawler = new PlaywrightCrawler({
         // }
         // else {
         //     await page.waitForSelector('.notion-collection-card')
-        //     await page.waitForSelector('.notion-collection-card__title')
+        // await page.waitForSelector('.notion-collection-card__title')
         //     // Add all links found on the page to the queue.
         //     await enqueueLinks({
         //         selector: '.notion-colle',
@@ -87,5 +87,5 @@ const crawler = new PlaywrightCrawler({
 });
 
 // Add first URL to the queue and start the crawl.
-//await crawler.run(['https://superteam.fun/instagrants', 'https://blockworks.co/grants/programs']);
-await crawler.run(['https://superteam.fun/instagrants']);
+await crawler.run(['https://superteam.fun/instagrants', 'https://blockworks.co/grants/programs']);
+//await crawler.run(['https://superteam.fun/instagrants']);
