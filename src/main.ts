@@ -11,9 +11,10 @@ const crawler = new PlaywrightCrawler({
 
 
         if (request.loadedUrl === 'https://blockworks.co/grants/programs') {
-            await page.waitForSelector('label > .flex.flex-col');
-            await page.click('text=Select ecosystem to filter')
+            await page.waitForSelector('button:has-text("Select ecosystem to filter")');
+            await page.click('button:has-text("Select ecosystem to filter")')
             await page.click('text=Solana')
+
 
             await enqueueLinks({
                 selector: 'tbody > tr > td > a.text-gray-900',
@@ -22,8 +23,20 @@ const crawler = new PlaywrightCrawler({
             })
 
         } else if (request.label === 'Card Detail') {
-            const link = request.url;
-            const title = await page.title();
+            await page.waitForLoadState('networkidle');
+            let link, title;
+
+            if (request.url.includes('notion.site')) {
+                await page.waitForLoadState('networkidle');
+
+                link = request.url;
+                title = await page.title();
+
+            } else {
+
+                link = request.url;
+                title = await page.title();
+            }
 
             const result = {
                 link,
@@ -32,7 +45,7 @@ const crawler = new PlaywrightCrawler({
             log.info(`result: ${result}`);
             await Dataset.pushData(result);
 
-           // await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
+            // await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
         } else {
             await page.waitForSelector('.notion-collection-card')
             await page.click
@@ -68,7 +81,7 @@ const crawler = new PlaywrightCrawler({
         // }
 
     },
-    // headless: false,
+    headless: false,
 
 
 });
