@@ -24,11 +24,11 @@ const crawler = new PlaywrightCrawler({
             })
 
         } else if (request.label === 'Card Detail') {
-            await page.waitForLoadState('networkidle');
+            await page.waitForLoadState('domcontentloaded');
             let link, title;
 
             if (request.url.includes('notion.site')) {
-                await page.waitForLoadState('networkidle', { timeout: 120000 });
+                await page.waitForLoadState('domcontentloaded', { timeout: 120000 });
 
                 link = request.url;
                 title = await page.title();
@@ -42,8 +42,9 @@ const crawler = new PlaywrightCrawler({
             const result = {
                 link,
                 title,
+
             }
-            log.info(`result: ${result}`);
+            log.info(`result: ${result.link} : ${result.title}`);
             await Dataset.pushData(result);
 
             await Dataset.exportToJSON('OUTPUT', { toKVS: 'my-data' })
